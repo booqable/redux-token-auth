@@ -15,23 +15,35 @@ const authHeaderKeys: Array<string> = [
   'uid',
 ]
 
-export const setAuthHeaders = (Storage: DeviceStorage, headers: AuthHeaders): void => {
-  authHeaderKeys.forEach((key: string) => {
-    Storage.getItem(key).then((fromStorage: string) => {
-      const value = headers[key] || fromStorage;
-      axios.defaults.headers.common[key] = value;
-    });
-  });
-};
+export const setAuthHeaders = (Storage: DeviceStorage, headers: AuthHeaders): Promise<void> => {
+  const promises: Promise<any>[] = []
 
-export const persistAuthHeadersInDeviceStorage = (Storage: DeviceStorage, headers: AuthHeaders): void => {
   authHeaderKeys.forEach((key: string) => {
-    Storage.getItem(key).then((fromStorage: string) => {
-      const value = headers[key] || fromStorage;
-      Storage.setItem(key, value); // <--- Not really needed
-    });
-  });
-};
+    const promise = Storage.getItem(key).then((fromStorage: string) => {
+      const value = headers[key] || fromStorage
+      axios.defaults.headers.common[key] = value
+    })
+
+    promises.push(promise)
+  })
+
+  return Promise.all(promises).then(() => {})
+}
+
+export const persistAuthHeadersInDeviceStorage = (Storage: DeviceStorage, headers: AuthHeaders): Promise<void> => {
+  const promises: Promise<any>[] = []
+
+  authHeaderKeys.forEach((key: string) => {
+    const promise = Storage.getItem(key).then((fromStorage: string) => {
+      const value = headers[key] || fromStorage
+      return Storage.setItem(key, value) // <--- Not really needed
+    })
+
+    promises.push(promise)
+  })
+
+  return Promise.all(promises).then(() => {})
+}
 
 export const deleteAuthHeaders = (): void => {
   authHeaderKeys.forEach((key: string) => {
@@ -39,10 +51,16 @@ export const deleteAuthHeaders = (): void => {
   })
 }
 
-export const deleteAuthHeadersFromDeviceStorage = async (Storage: DeviceStorage): Promise<void> => {
+export const deleteAuthHeadersFromDeviceStorage = (Storage: DeviceStorage): Promise<void> => {
+  const promises: Promise<any>[] = []
+
   authHeaderKeys.forEach((key: string) => {
-    Storage.removeItem(key)
+    const promise = Storage.removeItem(key)
+
+    promises.push(promise)
   })
+
+  return Promise.all(promises).then(() => {})
 }
 
 export const getUserAttributesFromResponse = (
