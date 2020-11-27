@@ -24,7 +24,8 @@
       "js",
       "jsx",
       "json"
-    ]
+    ],
+    "setupTestFrameworkScriptFile": "<rootDir>/test/setup.js"
   },
   "keywords": [
     "react",
