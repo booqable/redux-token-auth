@@ -169,6 +169,7 @@ const generateAuthActions = (config: { [key: string]: any }): ActionsExport => {
   ) => async function (dispatch: Dispatch<{}>): Promise<void> {
     dispatch(verifyTokenRequestSent())
     try {
+      setAuthHeaders(Storage)
       const response = await axios({
         method: 'GET',
         url: `${authUrl}/validate_token`,
@@ -218,6 +219,7 @@ const generateAuthActions = (config: { [key: string]: any }): ActionsExport => {
     }
     dispatch(signOutRequestSent())
     try {
+      setAuthHeaders(Storage)
       await axios({
         method: 'DELETE',
         url: `${authUrl}/sign_out`,

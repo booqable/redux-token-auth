@@ -15,12 +15,12 @@ const authHeaderKeys: Array<string> = [
   'uid',
 ]
 
-export const setAuthHeaders = (Storage: DeviceStorage, headers: AuthHeaders): Promise<void> => {
+export const setAuthHeaders = (Storage: DeviceStorage, headers?: AuthHeaders): Promise<void> => {
   const promises: Promise<any>[] = []
 
   authHeaderKeys.forEach((key: string) => {
     const promise = Storage.getItem(key).then((fromStorage: string) => {
-      const value = headers[key] || fromStorage
+      const value = (headers && headers[key]) || fromStorage
       axios.defaults.headers.common[key] = value
     })
 

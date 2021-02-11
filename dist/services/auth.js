@@ -13,7 +13,7 @@ exports.setAuthHeaders = function (Storage, headers) {
     var promises = [];
     authHeaderKeys.forEach(function (key) {
         var promise = Storage.getItem(key).then(function (fromStorage) {
-            var value = headers[key] || fromStorage;
+            var value = (headers && headers[key]) || fromStorage;
             axios_1.default.defaults.headers.common[key] = value;
         });
         promises.push(promise);

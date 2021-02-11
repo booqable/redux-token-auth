@@ -151,6 +151,7 @@ var generateAuthActions = function (config) {
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, , 4]);
+                        auth_1.setAuthHeaders(Storage);
                         return [4 /*yield*/, axios_1.default({
                                 method: 'GET',
                                 url: authUrl + "/validate_token",
@@ -229,6 +230,7 @@ var generateAuthActions = function (config) {
                         _c.label = 4;
                     case 4:
                         _c.trys.push([4, 6, , 7]);
+                        auth_1.setAuthHeaders(Storage);
                         return [4 /*yield*/, axios_1.default({
                                 method: 'DELETE',
                                 url: authUrl + "/sign_out",
